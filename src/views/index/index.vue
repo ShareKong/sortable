@@ -3,6 +3,14 @@
 		<!-- 工具栏 -->
 		<left-tool></left-tool>
 		<div class="phone">
+			<!-- 页面列表 -->
+			<div class="page-list">
+				<div class="title">页面列表</div>
+				<ul>
+					<li v-for="(item,index) in page_list" :key="index" @click="changePage(item.path)">{{item.text}}</li>
+				</ul>
+			</div>
+			<!-- 模拟手机 -->
 			<div class="iframe_param">
 				<iframe v-if="show_iframe" name="iframe_name" ref="iframe" class="iframe" :src="iframe_url" frameborder="0"></iframe>
 				<!-- <div id="iframe" class="iframe" style="width: 413px; height: 736px;"></div> -->
@@ -41,6 +49,11 @@
 				},
 				// 控制菜单栏刷新
 				rightFresh: true,
+				page_list: [
+					{text: '首页', path: 'http://127.0.0.1:8081/#/'},
+					{text: '个人中心', path: 'http://127.0.0.1:8082/#/'},
+					{text: '表单', path: 'http://127.0.0.1:8080/#/'},
+				]
 			}
 		},
 		created() {
@@ -131,7 +144,12 @@
 						attr_obj,
 					}
 				}, '*');
-			}
+			},
+			// 切换页面
+			changePage(url) {
+				this.iframe_url = url;
+				console.log(this.iframe_url)
+			},
 		},
 	}
 </script>
@@ -159,6 +177,40 @@
 		box-shadow: 0 0 10px #999 inset;
 		display: flex;
 		justify-content: center;
+		
+		.page-list {
+			position: absolute;
+			top: 10vh;
+			left: 2px;
+			width: 150px;
+			height: 70vh;
+			background-color: white;
+			padding: 10px;
+			color: #888;
+			box-shadow: 0 0 10px #999;
+			
+			.title {
+				text-align: center;
+				font-weight: 600;
+				margin-bottom: 15px;
+			}
+			
+			ul {
+				
+				li {
+					padding: 8px;
+					width: 100%;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+					cursor: pointer;
+					transition: all 0.5s;
+					&:hover {
+						background-color: #f1f1f1;
+					}
+				}
+			}
+		}
 		
 		.iframe_param {
 			position: relative;
