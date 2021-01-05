@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router.js'
+import Axios from 'axios'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import VueDraggable from 'vuedraggable'
 
 Vue.config.productionTip = false
+Vue.prototype.$axios = Axios;
 
 Vue.component('sortable', VueDraggable)
 Vue.use(ElementUI);

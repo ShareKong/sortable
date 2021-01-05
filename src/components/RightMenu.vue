@@ -16,7 +16,7 @@
 						<el-input v-model="attr_obj.default" placeholder="请输入内容"></el-input>
 					</el-form-item>
 				</template>
-				<el-button type="danger" @click="update">更新数据</el-button>
+				<el-button type="danger" @click="update">更新属性值</el-button>
 			</el-form>
 		</div>
 		<el-button @click="save" type="primary" class="save">保存布局</el-button>
@@ -27,6 +27,7 @@
 	export default {
 		props: {
 			chang: Boolean,
+			init_attr: Boolean,
 		},
 		data () {
 			return {
@@ -37,6 +38,9 @@
 			chang: function() {
 				// console.log('chang:', n, o);
 				this.setAttr();
+			},
+			init_attr: function() {
+				this.initAttrObj();
 			},
 		},
 		methods: {
@@ -52,7 +56,12 @@
 			update() {
 				localStorage.setItem('attr_obj', JSON.stringify(this.attr_obj));
 				this.$emit('save', 1);
-			}
+			},
+			// 初始化组件属性设置对象
+			initAttrObj() {
+				this.attr_obj = {};
+			},
+			
 		}
 	}
 </script>
@@ -66,6 +75,7 @@
 		text-align: center;
 		color: #888;
 		margin-bottom: 20px;
+		
 	}
 	
 	.attributes {
