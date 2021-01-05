@@ -3,7 +3,7 @@
 		<h2 style="margin-bottom: 20px;">组件</h2>
 		<sortable :group="sortable_options.group" class="sortable" :options="sortable_options" @clone="clone">
 			<template v-for="(item, index) in comp_list">
-				<div :data-id="item.data_id" :key="index">{{item.name}}</div>
+				<div :data-sorts="item.sorts" :key="index">{{item.name}}</div>
 			</template>
 			
 			<div class="add fixed" @click="showAddComp" title="添加新组件">
@@ -21,8 +21,8 @@
 					<el-form-item label="组件名称">
 						<el-input v-model="form.name" placeholder="请输入内容"></el-input>
 					</el-form-item>
-					<el-form-item label="组件 data-id">
-						<el-input v-model="form.data_id" placeholder="请输入内容"></el-input>
+					<el-form-item label="组件 data-sorts">
+						<el-input v-model="form.sorts" placeholder="请输入内容"></el-input>
 					</el-form-item>
 					<el-button type="success" @click="addComp">添加</el-button>
 				</el-form>
@@ -32,15 +32,12 @@
 </template>
 
 <script>
+	import CompList from '../common/st-data.js'
+	
 	export default {
 		data() {
 			return {
-				comp_list: [
-					{data_id: 'st-input', name: '输入框'},
-					{data_id: 'st-swiper', name: 'Banner'},
-					{data_id: 'st-search', name: '搜索框'},
-					{data_id: 'st-form', name: 'Form 表单'},
-				],
+				comp_list: [],
 				sortable_options: {
 					group: {
 						name: 'sort',
@@ -53,29 +50,30 @@
 				},
 				// 添加新组件数据
 				form: {
-					data_id: '',
+					sorts: '',
 					name: ''
 				},
 				dialogVisible: false,
 			}
 		},
+		mounted() {
+			this.comp_list = CompList;
+		},
 		methods: {
 			// 成功拖动组件出去时
-			clone(evt) {
+			clone() {
 				// console.log('LeftTool:', evt);
-				let attr_obj = {};
-				let data_id = evt.item.dataset.id;
-				if (data_id == 'st-input') {
-					attr_obj = {
-						placeholder: '',
-						default: '',
-					};
-				} else if (data_id == 'st-botton') {
-					attr_obj = {
-						btn_text: '',
-					};
-				}
-				localStorage.setItem('attr_obj', JSON.stringify(attr_obj));
+				// let attr_obj = {};
+				// let data_id = evt.item.dataset.id;
+				
+				// for(let k in this.comp_list)
+				// {
+				// 	if(this.comp_list[k].data_id == data_id) {
+				// 		attr_obj = this.comp_list[k];
+				// 	}
+				// }
+				// console.log(attr_obj);
+				// localStorage.setItem('attr_obj', JSON.stringify(attr_obj));
 			},
 			// 显示添加组件弹框
 			showAddComp() {
@@ -83,9 +81,7 @@
 			},
 			// 添加新组件
 			addComp() {
-				this.dialogVisible = false;
-				
-				if(!(this.form.data_id && this.form.name)) {
+				if(!(this.form.sorts && this.form.name)) {
 					this.$message({
 						showClose: true,
 						message: '请填写完整',
@@ -93,6 +89,7 @@
 					})
 				}
 				else {
+					this.dialogVisible = false;
 					this.comp_list.push(this.form);
 				}
 			},

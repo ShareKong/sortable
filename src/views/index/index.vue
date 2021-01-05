@@ -13,10 +13,11 @@
 			<!-- 模拟手机 -->
 			<div class="iframe_param">
 				<iframe v-if="show_iframe" name="iframe_name" ref="iframe" class="iframe" :src="iframe_url" frameborder="0"></iframe>
-				<!-- <div id="iframe" class="iframe" style="width: 413px; height: 736px;"></div> -->
 				<div class="st-mask" v-show="isStMask">
 					<sortable v-model="sortable_arr" :options="sortable_options" class="sortable" @add="sortableEnd"></sortable>
 				</div>
+				<!-- 鼠标点击的箭头 -->
+				<img v-if="scroll_y" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
 			</div>
 			<!-- 中间右侧操作栏 -->
 			<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp"></phone-right-menu>
@@ -36,6 +37,7 @@
 </template>
 
 <script>
+	import CompList from '../../common/st-data.js'
 	import LeftTool from '@/components/LeftTool.vue'
 	import RightMenu from '@/components/RightMenu.vue'
 	import PhoneRightMenu from '@/components/PhoneRightMenu.vue'
@@ -74,6 +76,8 @@
 				next_page_index: 0,
 				// 初始化 右侧 组件属性设置对象
 				init_attr: false,
+				// 标识鼠标点击的元素距离顶部的高度
+				scroll_y: 0,
 			}
 		},
 		mounted() {
@@ -129,8 +133,11 @@
 					case 'pageLayoutChange':
 						this.pageLayoutChange(dat.data);
 						break;
-					case 'activeGetSorts':
-						this.activeGetSorts(dat.data);
+					case 'activeGetUnique':
+						this.activeGetUnique(dat.data);
+						break;
+					case 'getScrollY':
+						this.getScrollY(dat.data);
 						break;
 				}
 			},
@@ -150,6 +157,7 @@
 					type: 'success',
 				})
 				this.refreshPhone();
+				this.hideLeftArrow();
 			},
 			// 保存失败回调
 			saveFail() {
@@ -159,6 +167,7 @@
 					title: '保存失败',
 					type: 'error',
 				})
+				this.hideLeftArrow();
 			},
 			// 删除组件成功回调
 			deleteSuccess() {
@@ -167,6 +176,7 @@
 					title: '删除成功',
 					type: 'success',
 				})
+				this.hideLeftArrow();
 			},
 			// 删除组件失败回调
 			deleteFail() {
@@ -175,11 +185,13 @@
 					title: '删除失败',
 					type: 'error',
 				})
+				this.hideLeftArrow();
 			},
 			// 监听 iframe 页面布局改变
 			pageLayoutChange(data) {
 				// console.log('布局改变: ', data)
 				this.is_page_change = data.flag;
+				this.hideLeftArrow();
 			},
 			// 刷新页面
 			refreshPhone() {
@@ -190,6 +202,7 @@
 				setTimeout(() => {
 					_this.show_iframe = true;
 				}, 10)
+				this.hideLeftArrow();
 			},
 			// 显示遮罩
 			showStMask() {
@@ -201,22 +214,33 @@
 			},
 			// 监听组件被拉入 iframe 中
 			sortableEnd(evt) {
-				let data_id = evt.clone.dataset.id;
-				let attr_obj = JSON.parse(localStorage.getItem('attr_obj'));
+				let data_sorts = evt.clone.dataset.sorts;
+				let attr_obj = {};
+				// let attr_obj = JSON.parse(localStorage.getItem('attr_obj'));
 				// console.log(evt)
+				for(let k in CompList)
+				{
+					if(CompList[k].sorts == data_sorts) {
+						attr_obj = CompList[k];
+						break;
+					}
+				}
+				// console.log(attr_obj)
+				// 让组件移动到 iframe 上之后隐藏
 				evt.item.style.width = 0;
 				evt.item.style.height = 0;
 				evt.item.style.overflow = 'hidden';
+				// 让组件移动到 iframe 上之后隐藏 end
 				this.isStMask = false;
-				this.rightFresh = !this.rightFresh;
+				// this.rightFresh = !this.rightFresh;
 				this.is_page_change = true;
 				this.$refs.iframe.contentWindow.postMessage({
 					method: 'add-st',
 					data: {
-						data_id,
 						attr_obj,
 					}
 				}, '*');
+				this.hideLeftArrow();
 			},
 			// 切换页面
 			changePage(index, url) {
@@ -231,6 +255,7 @@
 				this.iframe_url = url;
 				this.next_page_index = '';
 				this.next_page_path = '';
+				this.hideLeftArrow();
 			},
 			// 弹框确定取消按钮
 			dialogVisibleConfirm(flag) {
@@ -244,9 +269,13 @@
 					this.changePage(this.next_page_index, this.next_page_path);
 				}
 			},
-			// 鼠标点击 iframe 中组件获取该组件的 sorts
-			activeGetSorts(data) {
-				console.log('fu:', data);
+			// 鼠标点击 iframe 中组件获取该组件的 unique
+			activeGetUnique(data) {
+				// console.log('fu:', data);
+				let item = data.item;
+				localStorage.setItem('attr_obj', JSON.stringify(item));
+				this.rightFresh = !this.rightFresh;
+				// console.log(item);
 			},
 			// 通过 unique 删除 iframe 组件
 			deleteComp() {
@@ -254,10 +283,19 @@
 				this.$refs.iframe.contentWindow.postMessage({
 					method: 'deleteCompUnique'
 				}, '*');
+				this.hideLeftArrow();
 			},
 			// 初始化右侧属性设置框
 			initRightAttr() {
 				this.init_attr = !this.init_attr;
+			},
+			// 接收鼠标点击的位置
+			getScrollY(data) {
+				this.scroll_y = data.scroll_y + 19;
+			},
+			// 隐藏指向鼠标点击的向左箭头
+			hideLeftArrow() {
+				this.scroll_y = 0;
 			},
 			
 		},
@@ -363,6 +401,32 @@
 							color: red;
 						}
 					}
+				}
+			}
+			
+			.left-arrow {
+				position: absolute;
+				top: 0;
+				right: -50px;
+				width: 50px;
+				height: 50px;
+				animation: ant 1.5s linear infinite;
+			}
+			@keyframes ant {
+				0% {
+					right: -50px;
+				}
+				25% {
+					right: -53px;
+				}
+				50% {
+					right: -55px;
+				}
+				75% {
+					right: -53px;
+				}
+				100% {
+					right: -50px;
 				}
 			}
 		}
