@@ -36,8 +36,33 @@ const list = [
 		name: 'Form 表单',
 		// 导入的时候，系统会自动生成新的且唯一的 id
 		child_id: -1,
+		level: 2,
 		child: [
 			// 子 sortable 盒子
+			{
+				"sorts": 1,
+				"disable": false
+			},
+			{
+				"sorts": 2,
+				"disable": false
+			},
+			{
+				"sorts": 3,
+				"disable": false
+			},
+			{
+				"sorts": 4,
+				"disable": false
+			},
+			{
+				"sorts": 5,
+				"disable": false
+			},
+			{
+				"sorts": 6,
+				"disable": false
+			}
 		]
 	},
 	// 应用列表

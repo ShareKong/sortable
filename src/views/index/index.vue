@@ -17,7 +17,7 @@
 					<sortable v-model="sortable_arr" :options="sortable_options" class="sortable" @add="sortableEnd"></sortable>
 				</div>
 				<!-- 鼠标点击的箭头 -->
-				<img v-if="scroll_y" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
+				<img v-if="scroll_y" @dblclick="leftArrowDb" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
 			</div>
 			<!-- 中间右侧操作栏 -->
 			<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp"></phone-right-menu>
@@ -295,6 +295,10 @@
 			},
 			// 隐藏指向鼠标点击的向左箭头
 			hideLeftArrow() {
+				this.scroll_y = 0;
+			},
+			// 双击标志的向左箭头隐藏
+			leftArrowDb() {
 				this.scroll_y = 0;
 			},
 			

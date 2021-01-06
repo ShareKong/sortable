@@ -17,7 +17,7 @@
 		<!-- 添加新组件弹框 -->
 		<el-dialog title="添加组件" :visible.sync="dialogVisible" width="30%" style="width: 100%;">
 			<div class="add-comp">
-				<el-form :label-position="'right'" label-width="100px">
+				<el-form :label-position="'right'" label-width="120px">
 					<el-form-item label="组件名称">
 						<el-input v-model="form.name" placeholder="请输入内容"></el-input>
 					</el-form-item>
