@@ -95,9 +95,7 @@
 			},
 			// 保存布局
 			save(flag) {
-				/**
-				 * flag: 0 保存布局 1 设置属性数据
-				 */
+				// flag: 0 保存布局 1 设置属性数据
 				// this.$refs.iframe.contentWindow.save();
 				// window.frames['iframe_name'].save();
 				let dat = {};
