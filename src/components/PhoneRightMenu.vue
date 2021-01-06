@@ -9,9 +9,9 @@
 		<div class="menu" @click="deleteComp">
 			<img class="img-icon img-icon-circle" src="@/assets/icom-img/delete.png" alt="" title="删除该组件">
 		</div>
-		<div class="menu" @click="addPage">
+		<!-- <div class="menu" @click="addPage">
 			<img class="img-icon img-icon-circle" src="@/assets/icom-img/add.png" alt="" title="添加新页面">
-		</div>
+		</div> -->
 	</div>
 </template>
 

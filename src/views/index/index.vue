@@ -81,8 +81,8 @@
 			}
 		},
 		mounted() {
-			this.getPageList();
 			window.addEventListener('message', this.acceptMessage, false);
+			this.getPageList();
 		},
 		methods: {
 			// 获取页面列表
