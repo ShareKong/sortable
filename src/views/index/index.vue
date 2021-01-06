@@ -20,7 +20,7 @@
 				<img v-if="scroll_y" @dblclick="leftArrowDb" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
 			</div>
 			<!-- 中间右侧操作栏 -->
-			<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp"></phone-right-menu>
+			<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp" @backData="backData"></phone-right-menu>
 		</div>
 		<!-- 菜单栏 -->
 		<right-menu @save="save" :chang="rightFresh" :init_attr="init_attr"></right-menu>
@@ -73,7 +73,7 @@
 				// iframe要跳转下一个页面路径
 				next_page_path: '',
 				// iframe要跳转下一个页面在页面列表的坐标
-				next_page_index: 0,
+				next_page_index: -1,
 				// 初始化 右侧 组件属性设置对象
 				init_attr: false,
 				// 标识鼠标点击的元素距离顶部的高度
@@ -142,13 +142,16 @@
 			// 保存成功回调
 			saveSuccess() {
 				const _this = this;
-				console.log('is_page_change', this.page_list[this.page_list_index])
+				// console.log('is_page_change', this.is_page_change, this.page_list[this.page_list_index])
 				if(this.is_page_change) {
 					this.is_page_change = false;
-					this.page_list_index = this.next_page_index;
-					setTimeout(() => {
-						_this.changePage(_this.next_page_index||_this.page_list_index, _this.next_page_path||_this.page_list[_this.page_list_index].path);
-					}, 100)
+					if(this.next_page_index != -1) {
+						this.page_list_index = this.next_page_index;
+						setTimeout(() => {
+							_this.changePage(_this.next_page_index||_this.page_list_index, _this.next_page_path||_this.page_list[_this.page_list_index].path);
+						}, 100)
+					}
+					
 				}
 				this.$notify({
 					title: '保存成功',
@@ -242,6 +245,7 @@
 			},
 			// 切换页面
 			changePage(index, url) {
+				// console.log('url', url)
 				if(this.is_page_change) {
 					this.dialogVisible = true;
 					this.next_page_index = index;
@@ -251,7 +255,7 @@
 				this.initRightAttr();
 				this.page_list_index = index;
 				this.iframe_url = url;
-				this.next_page_index = '';
+				this.next_page_index = -1;
 				this.next_page_path = '';
 				this.hideLeftArrow();
 			},
@@ -298,6 +302,14 @@
 			// 双击标志的向左箭头隐藏
 			leftArrowDb() {
 				this.scroll_y = 0;
+			},
+			// 返回上一步
+			backData() {
+				// console.log('back data')
+				this.$refs.iframe.contentWindow.postMessage({
+					method: 'backData'
+				}, '*');
+				this.hideLeftArrow();
 			},
 			
 		},

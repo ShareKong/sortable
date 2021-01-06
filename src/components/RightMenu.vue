@@ -4,7 +4,7 @@
 		<!-- 组件属性 -->
 		<div class="attributes">
 			<div class="tip">{{attr_obj.name}}</div>
-			<div class="tip" v-if="(Object.keys(attr_obj)).length <= 3">暂无可设属性</div>
+			<div class="tip" v-if="!is_show">暂无可设属性</div>
 			<el-form v-else>
 				<template v-for="(item,index) in attr_obj">
 					<el-form-item label="提示内容" :key="index" v-if="index=='placeholder'">
@@ -29,7 +29,7 @@
 						</el-select>
 					</el-form-item>
 				</template>
-				<el-button type="danger" @click="update">设置属性值</el-button>
+				<el-button type="danger" @click="update" v-if="is_show">设置属性值</el-button>
 			</el-form>
 		</div>
 		<el-button @click="save" type="primary" class="save">保存布局</el-button>
@@ -47,7 +47,7 @@
 		data () {
 			return {
 				attr_obj: {},
-				is_show: false,
+				// is_show: false,
 			}
 		},
 		watch: {
@@ -58,6 +58,23 @@
 			init_attr: function() {
 				this.initAttrObj();
 			},
+		},
+		computed: {
+			is_show () {
+				let arr_len = (Object.keys(this.attr_obj)).length;
+				if(arr_len < 4) {
+					return false;
+				}
+				else {
+					for(let k in this.attr_obj)
+					{
+						if(k != 'sorts' && k != 'unique' && k != 'name' && k != 'level' && k != 'child' && k != 'child_id') {
+							return true;
+						}
+					}
+				}
+				return false;
+			}
 		},
 		methods: {
 			save() {

@@ -33,7 +33,7 @@
 			},
 			// 返回上一步
 			back() {
-				
+				this.$emit('backData');
 			},
 			// 添加新页面
 			addPage() {
@@ -69,8 +69,8 @@
 	.menu {
 		position: relative;
 		border-radius: 50%;
-		width: 50px;
-		height: 50px;
+		width: 40px;
+		height: 40px;
 		overflow: hidden;
 		transition: all 0.5s;
 		&::after {
@@ -94,8 +94,8 @@
 		
 		
 		.img-icon {
-			width: 50px;
-			height: 50px;
+			width: 100%;
+			height: 100%;
 			&-circle {
 				border-radius: 50%;
 			}
