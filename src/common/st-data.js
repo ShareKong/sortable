@@ -3,11 +3,12 @@
  */
 
 /**
- * 当前默认组件：
+ * 当前初始化组件：
 {
-	sorts:
-	name:
-	img_url: // 为组件的图片，后期换成图标
+	sorts: // 组件的专属 sorts，该在字段不能与其他组件值相同
+	name: // 组件名称
+	img_url: // 为组件的图片，后期换成图标，可以为空
+	// type 表示该组件可以在哪些类型的页面可以拖拽
 	type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
 }
  */
@@ -28,14 +29,18 @@ let list = [
 	{
 		sorts: 'st-button',
 		name: '按钮',
-		// 按钮文字
-		button_text: '',
-		// 字体颜色
-		text_color: '',
-		// 背景颜色
-		background_color: '',
 		img_url: require('@/assets/icon-component/st-button.png'),
 		type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
+		// 按钮文字
+		button_text: '',
+		// 按钮类型
+		button_type: 'default',
+		// 按钮尺寸
+		button_size: 'default',
+		// 按钮的形状
+		button_shape: 'square',
+		// 按钮是否镂空
+		button_plain: 'false',
 	},
 	// banner
 	{

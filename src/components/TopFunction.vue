@@ -69,7 +69,7 @@
 			},
 			// 页面设置
 			setPage() {
-				
+				this.$emit('setPage');
 			},
 			
 		}

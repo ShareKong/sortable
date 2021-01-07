@@ -1,28 +1,21 @@
 <template>
 	<div class="right-menu">
 		<div class="menu" @click="back">
-			<el-popover trigger="hover" placement="right" content="后退一步" :close-delay="0">
-				<img slot="reference" class="img-icon" src="@/assets/icom-img/back.png" alt="">
-			</el-popover>
+			<img class="img-icon" src="@/assets/icom-img/back.png" alt="">
+			<span class="tip">后退</span>
 		</div>
 		<div class="menu" @click="advance">
-			<el-popover trigger="hover" placement="right" content="前进一步" :close-delay="0">
-				<img slot="reference" class="img-icon" src="@/assets/icom-img/advance.png" alt="">
-			</el-popover>
+			<img class="img-icon" src="@/assets/icom-img/advance.png" alt="">
+			<span class="tip">前进</span>
 		</div>
 		<div class="menu" @click="refreshPhone">
-			<el-popover trigger="hover" placement="right" content="刷新页面" :close-delay="0">
-				<img slot="reference" class="img-icon" src="@/assets/icom-img/refresh.png" alt="">
-			</el-popover>
+			<img class="img-icon" src="@/assets/icom-img/refresh.png" alt="">
+			<span class="tip">刷新</span>
 		</div>
 		<div class="menu" @click="deleteComp">
-			<el-popover trigger="hover" placement="right" content="删除该组件" :close-delay="0">
-				<img slot="reference" class="img-icon" src="@/assets/icom-img/delete.png" alt="">
-			</el-popover>
+			<img class="img-icon" src="@/assets/icom-img/delete.png" alt="">
+			<span class="tip">删除</span>
 		</div>
-		<!-- <div class="menu" @click="addPage">
-			<img class="img-icon" src="@/assets/icom-img/add.png" alt="" title="添加新页面">
-		</div> -->
 	</div>
 </template>
 
@@ -49,10 +42,6 @@
 			// 前进
 			advance() {
 				this.$emit('advance');
-			},
-			// 添加新页面
-			addPage() {
-				
 			},
 			
 		},
@@ -87,10 +76,37 @@
 		width: 45px;
 		height: 45px;
 		transition: all 0.5s;
+		&:hover {
+			.tip {
+				animation: tipEff 1s ease-in;
+				animation-fill-mode: forwards;
+				display: block;
+			}
+		}
 		
 		.img-icon {
 			width: 100%;
 			height: 100%;
+		}
+		
+		.tip {
+			position: absolute;
+			display: none;
+			left: -40px;
+			top: 10px;
+			z-index: 9999;
+			color: #777;
+		}
+		@keyframes tipEff {
+			0% {
+				opacity: 1;
+				top: 10px;
+			}
+			100% {
+				opacity: 0;
+				top: -50px;
+				display: none;
+			}
 		}
 	}
 }

@@ -1,7 +1,7 @@
 <template>
 	<div id="index" @mousedown="showStMask" @mouseup="hideStMask">
 		<!-- 顶部功能栏 -->
-		<top-function :page_list="page_list" :page_list_index="page_list_index" @changePage="changePage" @save="save"></top-function>
+		<top-function :page_list="page_list" :page_list_index="page_list_index" @changePage="changePage" @save="save" @setPage="setPage"></top-function>
 		<!-- 主体区 -->
 		<div class="main">
 			<!-- 组件栏 -->
@@ -22,7 +22,7 @@
 				<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp" @backData="backData" @advance="advance"></phone-right-menu>
 			</div>
 			<!-- 菜单栏 -->
-			<right-menu :chang="rightFresh" :init_attr="init_attr" @save="save"></right-menu>
+			<right-menu :chang="rightFresh" :init_attr="init_attr" :is_set_page="is_set_page" @save="save"></right-menu>
 		</div>
 		
 		
@@ -87,6 +87,8 @@
 				page_type: 'index',
 				// iframe要跳转下一个页面的页面类型
 				next_page_type: 'index',
+				// 是否是页面设置
+				is_set_page: false,
 			}
 		},
 		mounted() {
@@ -289,6 +291,7 @@
 				let item = data.item;
 				localStorage.setItem('attr_obj', JSON.stringify(item));
 				this.rightFresh = !this.rightFresh;
+				this.is_set_page = false;
 				// console.log(item);
 			},
 			// 通过 unique 删除 iframe 组件
@@ -330,6 +333,10 @@
 					method: 'advance'
 				}, '*');
 				this.hideLeftArrow();
+			},
+			// 页面设置
+			setPage() {
+				this.is_set_page = true;
 			},
 			
 		},

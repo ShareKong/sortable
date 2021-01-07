@@ -1,8 +1,12 @@
 <template>
 	<div class="right-menu">
-		<div class="title">属性设置</div>
+		<div class="title">{{is_set_page?'页面':'属性'}}设置</div>
+		<!-- 页面设置 -->
+		<div class="page-set" v-if="is_set_page">
+			
+		</div>
 		<!-- 组件属性 -->
-		<div class="attributes">
+		<div class="attributes" v-else>
 			<div class="tip">{{attr_obj.name}}</div>
 			<div class="tip" v-if="!is_show">暂无可设属性</div>
 			<el-form v-else>
@@ -13,11 +17,26 @@
 					<el-form-item label="按钮文字" :key="index" v-if="index=='button_text'">
 						<el-input v-model="attr_obj.button_text" placeholder="请输入内容"></el-input>
 					</el-form-item>
-					<el-form-item label="文字颜色" :key="index" v-if="index=='text_color'">
-						<el-color-picker v-model="attr_obj.text_color"></el-color-picker>
+					<el-form-item label="按钮类型" :key="index" v-if="index=='button_type'">
+						<el-radio v-model="attr_obj.button_type" label="default">default</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="primary">primary</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="error">error</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="warning">warning</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="success">success</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="info">info</el-radio>
 					</el-form-item>
-					<el-form-item label="背景颜色" :key="index" v-if="index=='background_color'">
-						<el-color-picker v-model="attr_obj.background_color"></el-color-picker>
+					<el-form-item label="按钮尺寸" :key="index" v-if="index=='button_size'">
+						<el-radio v-model="attr_obj.button_size" label="default">默认</el-radio>
+						<el-radio v-model="attr_obj.button_size" label="medium">中等</el-radio>
+						<el-radio v-model="attr_obj.button_size" label="mini">迷你</el-radio>
+					</el-form-item>
+					<el-form-item label="按钮形状" :key="index" v-if="index=='button_shape'">
+						<el-radio v-model="attr_obj.button_shape" label="square">直角</el-radio>
+						<el-radio v-model="attr_obj.button_shape" label="circle">圆角</el-radio>
+					</el-form-item>
+					<el-form-item label="按钮是否镂空" :key="index" v-if="index=='button_plain'">
+						<el-radio v-model="attr_obj.button_plain" label="false">否</el-radio>
+						<el-radio v-model="attr_obj.button_plain" label="true">是</el-radio>
 					</el-form-item>
 					<el-form-item label="默认值" :key="index" v-if="index=='value'">
 						<el-input v-model="attr_obj.value" placeholder="请输入内容"></el-input>
@@ -42,6 +61,7 @@
 		props: {
 			chang: Boolean,
 			init_attr: Boolean,
+			is_set_page: Boolean,
 		},
 		data () {
 			return {
@@ -54,6 +74,9 @@
 			},
 			init_attr: function() {
 				this.initAttrObj();
+			},
+			is_set_page(n) {
+				console.log(n)
 			},
 		},
 		computed: {
@@ -91,6 +114,7 @@
 			},
 			// 更新数据
 			update() {
+				// console.log(this.attr_obj)
 				localStorage.setItem('attr_obj', JSON.stringify(this.attr_obj));
 				this.$emit('save', 1);
 			},
