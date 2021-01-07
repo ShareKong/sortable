@@ -1,16 +1,27 @@
 <template>
 	<div class="right-menu">
 		<div class="menu" @click="back">
-			<img class="img-icon img-icon-circle" src="@/assets/icom-img/back.png" alt="" title="返回上一步">
+			<el-popover trigger="hover" placement="right" content="后退一步" :close-delay="0">
+				<img slot="reference" class="img-icon" src="@/assets/icom-img/back.png" alt="">
+			</el-popover>
+		</div>
+		<div class="menu" @click="advance">
+			<el-popover trigger="hover" placement="right" content="前进一步" :close-delay="0">
+				<img slot="reference" class="img-icon" src="@/assets/icom-img/advance.png" alt="">
+			</el-popover>
 		</div>
 		<div class="menu" @click="refreshPhone">
-			<img class="img-icon img-icon-circle" src="@/assets/icom-img/refresh.png" alt="" title="刷新页面">
+			<el-popover trigger="hover" placement="right" content="刷新页面" :close-delay="0">
+				<img slot="reference" class="img-icon" src="@/assets/icom-img/refresh.png" alt="">
+			</el-popover>
 		</div>
 		<div class="menu" @click="deleteComp">
-			<img class="img-icon img-icon-circle" src="@/assets/icom-img/delete.png" alt="" title="删除该组件">
+			<el-popover trigger="hover" placement="right" content="删除该组件" :close-delay="0">
+				<img slot="reference" class="img-icon" src="@/assets/icom-img/delete.png" alt="">
+			</el-popover>
 		</div>
 		<!-- <div class="menu" @click="addPage">
-			<img class="img-icon img-icon-circle" src="@/assets/icom-img/add.png" alt="" title="添加新页面">
+			<img class="img-icon" src="@/assets/icom-img/add.png" alt="" title="添加新页面">
 		</div> -->
 	</div>
 </template>
@@ -31,9 +42,13 @@
 			deleteComp() {
 				this.$emit('deleteComp');
 			},
-			// 返回上一步
+			// 后退
 			back() {
 				this.$emit('backData');
+			},
+			// 前进
+			advance() {
+				this.$emit('advance');
 			},
 			// 添加新页面
 			addPage() {
@@ -69,36 +84,13 @@
 	.menu {
 		position: relative;
 		border-radius: 50%;
-		width: 40px;
-		height: 40px;
-		overflow: hidden;
+		width: 45px;
+		height: 45px;
 		transition: all 0.5s;
-		&::after {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			height: 100%;
-			width: 100%;
-			background-color: #409EFF;
-			opacity: 0.3;
-			transition: all 0.2s;
-			transform: scale(0);
-			border-radius: 50%;
-		}
-		&:hover {
-			&::after {
-				transform: scale(1);
-			}
-		}
-		
 		
 		.img-icon {
 			width: 100%;
 			height: 100%;
-			&-circle {
-				border-radius: 50%;
-			}
 		}
 	}
 }

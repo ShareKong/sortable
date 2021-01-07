@@ -1,29 +1,30 @@
 <template>
 	<div id="index" @mousedown="showStMask" @mouseup="hideStMask">
-		<!-- 工具栏 -->
-		<left-tool></left-tool>
-		<div class="phone">
-			<!-- 页面列表 -->
-			<div class="page-list">
-				<div class="title">页面列表</div>
-				<ul>
-					<li v-for="(item,index) in page_list" :key="index" @click="changePage(index, item.path)" :class="{'li-active': index==page_list_index}">{{item.name}}</li>
-				</ul>
-			</div>
-			<!-- 模拟手机 -->
-			<div class="iframe_param">
-				<iframe v-if="show_iframe" name="iframe_name" ref="iframe" class="iframe" :src="iframe_url" frameborder="0"></iframe>
-				<div class="st-mask" v-show="isStMask">
-					<sortable v-model="sortable_arr" :options="sortable_options" class="sortable" @add="sortableEnd"></sortable>
+		<!-- 顶部功能栏 -->
+		<top-function :page_list="page_list" :page_list_index="page_list_index" @changePage="changePage" @save="save"></top-function>
+		<!-- 主体区 -->
+		<div class="main">
+			<!-- 组件栏 -->
+			<left-tool :page_type="page_type"></left-tool>
+			<div class="phone">
+				<!-- 页面列表 -->
+				<!-- <page-list :page_list="page_list" :page_list_index="page_list_index" @changePage="changePage"></page-list> -->
+				<!-- 模拟手机 -->
+				<div class="iframe_param">
+					<iframe v-if="show_iframe" name="iframe_name" ref="iframe" class="iframe" :src="iframe_url" frameborder="0"></iframe>
+					<div class="st-mask" v-show="isStMask">
+						<sortable v-model="sortable_arr" :options="sortable_options" class="sortable" @add="sortableEnd"></sortable>
+					</div>
+					<!-- 鼠标点击的箭头 -->
+					<img v-if="scroll_y" @dblclick="leftArrowDb" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
 				</div>
-				<!-- 鼠标点击的箭头 -->
-				<img v-if="scroll_y" @dblclick="leftArrowDb" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
+				<!-- 中间右侧操作栏 -->
+				<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp" @backData="backData" @advance="advance"></phone-right-menu>
 			</div>
-			<!-- 中间右侧操作栏 -->
-			<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp" @backData="backData"></phone-right-menu>
+			<!-- 菜单栏 -->
+			<right-menu :chang="rightFresh" :init_attr="init_attr" @save="save"></right-menu>
 		</div>
-		<!-- 菜单栏 -->
-		<right-menu @save="save" :chang="rightFresh" :init_attr="init_attr"></right-menu>
+		
 		
 		<!-- 提示弹框 -->
 		<el-dialog title="提示" :visible.sync="dialogVisible" width="30%" style="width: 100%;">
@@ -41,12 +42,16 @@
 	import LeftTool from '@/components/LeftTool.vue'
 	import RightMenu from '@/components/RightMenu.vue'
 	import PhoneRightMenu from '@/components/PhoneRightMenu.vue'
+	// import PageList from '@/components/PageList.vue'
+	import TopFunction from '@/components/TopFunction.vue'
 	
 	export default {
 		components: {
 			LeftTool,
 			RightMenu,
 			PhoneRightMenu,
+			// PageList,
+			TopFunction,
 		},
 		data() {
 			return {
@@ -78,6 +83,10 @@
 				init_attr: false,
 				// 标识鼠标点击的元素距离顶部的高度
 				scroll_y: 0,
+				// 当前页面的页面类型
+				page_type: 'index',
+				// iframe要跳转下一个页面的页面类型
+				next_page_type: 'index',
 			}
 		},
 		mounted() {
@@ -90,6 +99,7 @@
 				const _this = this;
 				this.$axios.get('http://thinkphp/get_data').then(res => {
 					_this.changePage(0, res.data[0].path);
+					_this.page_type = res.data[0].type;
 					_this.page_list = res.data;
 				})
 			},
@@ -148,7 +158,7 @@
 					if(this.next_page_index != -1) {
 						this.page_list_index = this.next_page_index;
 						setTimeout(() => {
-							_this.changePage(_this.next_page_index||_this.page_list_index, _this.next_page_path||_this.page_list[_this.page_list_index].path);
+							_this.changePage(_this.next_page_index||_this.page_list_index, _this.next_page_path||_this.page_list[_this.page_list_index].path, _this.next_page_type||_this.page_type);
 						}, 100)
 					}
 					
@@ -244,12 +254,13 @@
 				this.hideLeftArrow();
 			},
 			// 切换页面
-			changePage(index, url) {
+			changePage(index, url, type) {
 				// console.log('url', url)
 				if(this.is_page_change) {
 					this.dialogVisible = true;
 					this.next_page_index = index;
 					this.next_page_path = url;
+					this.next_page_type = type;
 					return;
 				}
 				this.initRightAttr();
@@ -258,6 +269,7 @@
 				this.next_page_index = -1;
 				this.next_page_path = '';
 				this.hideLeftArrow();
+				this.page_type = type;
 			},
 			// 弹框确定取消按钮
 			dialogVisibleConfirm(flag) {
@@ -268,7 +280,7 @@
 				}
 				else {
 					this.is_page_change = false;
-					this.changePage(this.next_page_index, this.next_page_path);
+					this.changePage(this.next_page_index, this.next_page_path, this.next_page_type);
 				}
 			},
 			// 鼠标点击 iframe 中组件获取该组件的 unique
@@ -293,7 +305,7 @@
 			},
 			// 接收鼠标点击的位置
 			getScrollY(data) {
-				this.scroll_y = data.scroll_y + 19;
+				this.scroll_y = data.scroll_y + 30;
 			},
 			// 隐藏指向鼠标点击的向左箭头
 			hideLeftArrow() {
@@ -311,26 +323,41 @@
 				}, '*');
 				this.hideLeftArrow();
 			},
+			// 前进
+			advance() {
+				// console.log('advance')
+				this.$refs.iframe.contentWindow.postMessage({
+					method: 'advance'
+				}, '*');
+				this.hideLeftArrow();
+			},
 			
 		},
 	}
 </script>
 
 <style lang="scss" scoped>
-	#index {
+#index {
+	height: 100vh;
+	width: 100%;
+	>div {
+		&:nth-child(1) {
+			height: 60px;
+		}
+	}
+	
+	.main {
 		display: flex;
-		justify-content: space-between;
-		height: 100vh;
-		width: 100%;
-
+		height: calc(100vh - 60px);
+		overflow: hidden;
+		
 		>div {
 			padding: 20px;
-
-			&:not(phone) {
-				width: 35%;
+			&:nth-child(3) {
+				width: 30%;
 			}
 		}
-
+		
 		.phone {
 			position: relative;
 			width: 100%;
@@ -340,74 +367,32 @@
 			box-shadow: 0 0 10px #999 inset;
 			display: flex;
 			justify-content: center;
-
+		
 			>div {
 				box-shadow: 0 0 10px #999;
 			}
-
-			.page-list {
-				position: absolute;
-				top: 10vh;
-				left: 2px;
-				width: 150px;
-				height: 70vh;
-				background-color: white;
-				padding: 10px;
-				color: #888;
-
-				.title {
-					text-align: center;
-					font-weight: 600;
-					margin-bottom: 15px;
-				}
-
-				ul {
-
-					li {
-						padding: 8px;
-						width: 100%;
-						overflow: hidden;
-						white-space: nowrap;
-						text-overflow: ellipsis;
-						cursor: pointer;
-						transition: all 0.5s;
-						border: 1px solid white;
-						margin-bottom: 2px;
-
-						&:hover {
-							border: 1px solid rgba(64,158,255, .3);
-							background-color: rgba(64,158,255, .1);
-						}
-					}
-
-					.li-active {
-						border: 1px solid rgba(64,158,255, .3);
-						background-color: rgba(64,158,255, .1);
-					}
-				}
-			}
-
+		
 			.iframe_param {
 				position: relative;
 				width: 416px;
 				height: 738px;
-
+		
 				.iframe {
 					width: 100%;
 					height: 100%;
 				}
-
+		
 				.st-mask {
 					position: absolute;
 					left: 0;
 					top: 0;
 					width: 100%;
 					height: 100%;
-
+		
 					.sortable {
 						width: 100%;
 						height: 100%;
-
+		
 						* {
 							width: 0;
 							height: 0;
@@ -421,28 +406,29 @@
 			.left-arrow {
 				position: absolute;
 				top: 0;
-				right: -50px;
-				width: 50px;
-				height: 50px;
+				right: 0px;
+				width: 30px;
+				height: 30px;
 				animation: ant 1.5s linear infinite;
 			}
 			@keyframes ant {
 				0% {
-					right: -50px;
+					right: -30px;
 				}
 				25% {
-					right: -53px;
+					right: -33px;
 				}
 				50% {
-					right: -55px;
+					right: -35px;
 				}
 				75% {
-					right: -53px;
+					right: -33px;
 				}
 				100% {
-					right: -50px;
+					right: -30px;
 				}
 			}
 		}
 	}
+}
 </style>

@@ -1,21 +1,17 @@
 <template>
 	<div class="left-tool">
-		<h2 style="margin-bottom: 20px;">组件</h2>
-		<sortable :group="sortable_options.group" class="sortable" :options="sortable_options" @clone="clone">
+		<h2 class="title">组件</h2>
+		<sortable :group="sortable_options.group" class="sortable" :options="sortable_options">
 			<template v-for="(item, index) in comp_list">
-				<div :data-sorts="item.sorts" :key="index">{{item.name}}</div>
+				<div :data-sorts="item.sorts" :key="index" class="comp" v-if="item.type.indexOf(page_type) > -1">
+					<img :src="item.img_url" alt="">
+					<span>{{item.name}}</span>
+				</div>
 			</template>
-			
-			<div class="add fixed" @click="showAddComp" title="添加新组件">
-				<img src="../assets/icom-img/add.png" alt="" class="img">
-			</div>
 		</sortable>
-		<!-- 		<sortable :group="sortable_options.group" class="sortable" :options="sortable_options" @clone="clone">
-			<div data-id="st-botton">按钮</div>
-		</sortable> -->
 		
 		<!-- 添加新组件弹框 -->
-		<el-dialog title="添加组件" :visible.sync="dialogVisible" width="30%" style="width: 100%;">
+		<!-- <el-dialog title="添加组件" :visible.sync="dialogVisible" width="30%" style="width: 100%;">
 			<div class="add-comp">
 				<el-form :label-position="'right'" label-width="120px">
 					<el-form-item label="组件名称">
@@ -27,7 +23,7 @@
 					<el-button type="success" @click="addComp">添加</el-button>
 				</el-form>
 			</div>
-		</el-dialog>
+		</el-dialog> -->
 	</div>
 </template>
 
@@ -35,6 +31,11 @@
 	import CompList from '../common/st-data.js'
 	
 	export default {
+		props: {
+			page_type: {
+				type: String
+			}
+		},
 		data() {
 			return {
 				comp_list: [],
@@ -56,25 +57,15 @@
 				dialogVisible: false,
 			}
 		},
+		// watch: {
+		// 	page_type() {
+		// 		this.$forceUpdate();
+		// 	}
+		// },
 		mounted() {
 			this.comp_list = CompList;
 		},
 		methods: {
-			// 成功拖动组件出去时
-			clone() {
-				// console.log('LeftTool:', evt);
-				// let attr_obj = {};
-				// let data_id = evt.item.dataset.id;
-				
-				// for(let k in this.comp_list)
-				// {
-				// 	if(this.comp_list[k].data_id == data_id) {
-				// 		attr_obj = this.comp_list[k];
-				// 	}
-				// }
-				// console.log(attr_obj);
-				// localStorage.setItem('attr_obj', JSON.stringify(attr_obj));
-			},
 			// 显示添加组件弹框
 			showAddComp() {
 				this.dialogVisible = true;
@@ -100,53 +91,68 @@
 
 <style lang="scss" scoped>
 	.left-tool {
-
+		width: 340px;
+		flex-shrink: 0;
+		height: 100%;
+		margin-bottom: 50px;
+		
+		.title {
+			margin-bottom: 30px;
+			text-align: center;
+			color: #777;
+		}
+		
+			
 		.sortable {
-			border: 1px solid #ddd;
-			padding: 20px;
-			border-radius: 10px;
+			max-height: calc(100% - 61px);
+			// border: 1px solid #eee;
+			overflow-y: scroll;
 			display: flex;
 			flex-wrap: wrap;
-			margin-bottom: 30px;
-			padding-bottom: 10px;
-
+			align-content: flex-start;
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		
 			>div {
-				// background-color: #409EFF;
-				border: 1px solid rgba(64, 158, 255, .5);
-				background-color: rgba(64, 158, 255, .2);
+				border: 1px solid #f1f1f1;
+				width: 100px;
+				height: 100px;
 				color: #777;
 				padding: 10px;
 				cursor: pointer;
-				margin-right: 10px;
-				margin-bottom: 10px;
-
+				transition: all 0.5s;
+				overflow: hidden;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+				align-items: center;
 				&:hover {
-					border: 1px solid rgba(64, 158, 255, .8);
-					background-color: rgba(64, 158, 255, .4);
+					border: 1px solid rgba(64, 158, 255, .5);
+					background-color: rgba(64, 158, 255, .1);
 				}
 			}
-
-			.add {
-				width: 43px;
-				height: 43px;
-				border: none;
-				background-color: transparent;
-				transition: all 0.5s;
-
-				.img {
-					height: 100%;
+			
+			.comp {
+				
+				>img {
+					width: 30px;
+					height: 20px;
+					margin-bottom: 10px;
+				}
+				
+				>span {
+					display: inline-block;
 					width: 100%;
-					transform: scale(1.5);
-					// &:hover {
-					// 	border: none;
-					// 	background-color: transparent;
-					// }
+					text-align: center;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
 				}
 			}
 		}
 
 		.add-comp {
-			// border: 1px solid #ddd;
 			padding: 20px;
 			border-radius: 10px;
 			margin-bottom: 30px;

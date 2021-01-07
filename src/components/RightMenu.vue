@@ -32,7 +32,6 @@
 				<el-button type="danger" @click="update" v-if="is_show">设置属性值</el-button>
 			</el-form>
 		</div>
-		<el-button @click="save" type="primary" class="save">保存布局</el-button>
 	</div>
 </template>
 
@@ -47,12 +46,10 @@
 		data () {
 			return {
 				attr_obj: {},
-				// is_show: false,
 			}
 		},
 		watch: {
 			chang: function() {
-				// console.log('chang:', n, o);
 				this.setAttr();
 			},
 			init_attr: function() {
@@ -77,9 +74,6 @@
 			}
 		},
 		methods: {
-			save() {
-				this.$emit('save');
-			},
 			// 设置引入组件的属性
 			setAttr() {
 				let attr_obj = JSON.parse(localStorage.getItem('attr_obj'));
@@ -122,9 +116,9 @@
 	}
 	
 	.attributes {
-		border: 1px solid #eee;
+		// border: 1px solid #eee;
 		padding: 20px 10px;
-		border-radius: 10px;
+		// border-radius: 10px;
 		
 		.tip {
 			text-align: center;
@@ -134,12 +128,4 @@
 		}
 	}
 }
-
-.save {
-	position: absolute;
-	width: 90%;
-	bottom: 20px;
-	left: 5%;
-}
-
 </style>
