@@ -172,6 +172,7 @@
 							message: '页面信息设置成功',
 							type: 'success'
 						})
+						this.$emit('setPageSuccess');
 					}
 					else {
 						this.$message({

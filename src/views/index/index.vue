@@ -22,7 +22,7 @@
 				<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp" @backData="backData" @advance="advance"></phone-right-menu>
 			</div>
 			<!-- 菜单栏 -->
-			<right-menu :chang="rightFresh" :init_attr="init_attr" :is_set_page="is_set_page" :page_type="page_type" :page_item="page_list[page_list_index]" @save="save"></right-menu>
+			<right-menu :chang="rightFresh" :init_attr="init_attr" :is_set_page="is_set_page" :page_type="page_type" :page_item="page_list[page_list_index]" @save="save" @setPageSuccess="setPageSuccess"></right-menu>
 		</div>
 		
 		
@@ -341,6 +341,12 @@
 			setPage() {
 				this.is_set_page = true;
 				this.hideLeftArrow();
+			},
+			// 页面信息设置成功
+			setPageSuccess() {
+				this.$refs.iframe.contentWindow.postMessage({
+					method: 'setPageSuccess'
+				}, '*');
 			},
 			
 		},
