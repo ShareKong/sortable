@@ -102,6 +102,16 @@ let list = [
 		img_url: require('@/assets/icon-component/st-applys.png'),
 		type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
 	},
+	// 公告
+	{
+		sorts: 'st-notice',
+		name: '公告',
+		img_url: require('@/assets/icon-component/st-applys.png'),
+		type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
+		notice_item: 'warning',
+		notice_scroll: 'horizontal',
+		notice_join: 'true',
+	}
 ]
 
 // 测试的组件

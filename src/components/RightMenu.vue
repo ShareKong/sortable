@@ -8,7 +8,7 @@
 	<div class="right-menu">
 		<div class="title">{{is_set_page?'页面':'属性'}}设置</div>
 		<!-- 页面设置 -->
-		<div class="page-set" v-if="!is_set_page">
+		<div class="page-set" v-if="is_set_page">
 			<el-form label-width="80px">
 				<el-form-item label="页面名称">
 					<el-input v-model="page_info.page_name" placeholder="请输入内容"></el-input>
@@ -67,6 +67,22 @@
 							<el-option label="垂直" value="vertical"></el-option>
 						</el-select>
 					</el-form-item>
+					<el-form-item label="主题类型" :key="index" v-if="index=='notice_item'">
+						<el-radio v-model="attr_obj.notice_item" label="primary">primary</el-radio>
+						<el-radio v-model="attr_obj.notice_item" label="success">success</el-radio>
+						<el-radio v-model="attr_obj.notice_item" label="error">error</el-radio>
+						<el-radio v-model="attr_obj.notice_item" label="warning">warning</el-radio>
+						<el-radio v-model="attr_obj.notice_item" label="none">none</el-radio>
+					</el-form-item>
+					<el-form-item label="滚动模式" :key="index" v-if="index=='notice_scroll'">
+						<el-radio v-model="attr_obj.notice_scroll" label="horizontal">水平</el-radio>
+						<el-radio v-model="attr_obj.notice_scroll" label="vertical">垂直</el-radio>
+					</el-form-item>
+					<el-form-item label="是否衔接" :key="index" v-if="index=='notice_join'">
+						<el-radio v-model="attr_obj.notice_join" label="false">否</el-radio>
+						<el-radio v-model="attr_obj.notice_join" label="true">是</el-radio>
+					</el-form-item>
+					
 				</template>
 				<!-- <el-button type="danger" @click="update" v-if="is_show">设置属性值</el-button> -->
 			</el-form>
@@ -76,6 +92,7 @@
 
 <script>
 	// import CompList from '../common/st-data.js'
+	import publicList from '../common/st-component-public.js'
 	
 	export default {
 		props: {
@@ -90,8 +107,6 @@
 				type_list: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
 				page_info: {},
 			}
-		},
-		mounted() {
 		},
 		watch: {
 			chang: function() {
@@ -113,13 +128,13 @@
 			// 判断组件是否有可设属性
 			is_show () {
 				let arr_len = (Object.keys(this.attr_obj)).length;
-				if(arr_len < 4) {
+				if(arr_len < publicList.attr_len) {
 					return false;
 				}
 				else {
 					for(let k in this.attr_obj)
 					{
-						if(k != 'sorts' && k != 'unique' && k != 'name' && k != 'level' && k != 'child' && k != 'child_id' && k != 'img_url' && k != 'type') {
+						if(publicList.public_list.indexOf(k) == -1) {
 							return true;
 						}
 					}
