@@ -22,7 +22,7 @@
 				<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp" @backData="backData" @advance="advance"></phone-right-menu>
 			</div>
 			<!-- 菜单栏 -->
-			<right-menu :chang="rightFresh" :init_attr="init_attr" :is_set_page="is_set_page" @save="save"></right-menu>
+			<right-menu :chang="rightFresh" :init_attr="init_attr" :is_set_page="is_set_page" :page_type="page_type" :page_item="page_list[page_list_index]" @save="save"></right-menu>
 		</div>
 		
 		
@@ -69,6 +69,7 @@
 				},
 				// 控制菜单栏刷新
 				rightFresh: true,
+				// 页面列表
 				page_list: [],
 				// 控制当前显示的页面列表中的样式
 				page_list_index: 0,
@@ -84,9 +85,9 @@
 				// 标识鼠标点击的元素距离顶部的高度
 				scroll_y: 0,
 				// 当前页面的页面类型
-				page_type: 'index',
+				page_type: '',
 				// iframe要跳转下一个页面的页面类型
-				next_page_type: 'index',
+				next_page_type: '',
 				// 是否是页面设置
 				is_set_page: false,
 			}
@@ -99,10 +100,11 @@
 			// 获取页面列表
 			getPageList() {
 				const _this = this;
-				this.$axios.get('http://thinkphp/get_data').then(res => {
-					_this.changePage(0, res.data[0].path);
-					_this.page_type = res.data[0].type;
-					_this.page_list = res.data;
+				this.http.getPageList().then(res => {
+					// console.log(res)
+					_this.changePage(0, res[0].path);
+					_this.page_type = res[0].type;
+					_this.page_list = res;
 				})
 			},
 			// 保存布局
@@ -110,8 +112,8 @@
 				// flag: 0 保存布局 1 设置属性数据
 				// this.$refs.iframe.contentWindow.save();
 				// window.frames['iframe_name'].save();
+				// console.log(this.$refs.iframe)
 				let dat = {};
-
 				if (flag == 1) {
 					dat = JSON.parse(localStorage.getItem('attr_obj'));
 					this.$refs.iframe.contentWindow.postMessage({
@@ -204,7 +206,7 @@
 			pageLayoutChange(data) {
 				// console.log('布局改变: ', data)
 				this.is_page_change = data.flag;
-				this.hideLeftArrow();
+				// this.hideLeftArrow();
 			},
 			// 刷新页面
 			refreshPhone() {
@@ -272,6 +274,7 @@
 				this.next_page_path = '';
 				this.hideLeftArrow();
 				this.page_type = type;
+				this.is_set_page = false;
 			},
 			// 弹框确定取消按钮
 			dialogVisibleConfirm(flag) {
@@ -337,6 +340,7 @@
 			// 页面设置
 			setPage() {
 				this.is_set_page = true;
+				this.hideLeftArrow();
 			},
 			
 		},
