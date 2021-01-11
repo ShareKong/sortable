@@ -1,10 +1,12 @@
 <template>
 	<div class="left-tool">
 		<h2 class="title">组件</h2>
-		<sortable :group="sortable_options.group" class="sortable" :options="sortable_options">
+		<sortable :group="sortable_options.group" class="sortable scrollbar" :options="sortable_options">
 			<template v-for="(item, index) in comp_list">
 				<div :data-sorts="item.sorts" :key="index" class="comp" v-if="item.type.indexOf(page_type) > -1">
-					<img :src="item.img_url" alt="">
+					<div class="img">
+						<img :src="item.img_url" alt="无图片">
+					</div>
 					<span>{{item.name}}</span>
 				</div>
 			</template>
@@ -91,7 +93,7 @@
 
 <style lang="scss" scoped>
 	.left-tool {
-		width: 340px;
+		width: 350px;
 		flex-shrink: 0;
 		height: 100%;
 		margin-bottom: 50px;
@@ -106,13 +108,10 @@
 		.sortable {
 			max-height: calc(100% - 61px);
 			// border: 1px solid #eee;
-			overflow-y: scroll;
 			display: flex;
 			flex-wrap: wrap;
 			align-content: flex-start;
-			&::-webkit-scrollbar {
-				display: none;
-			}
+			overflow-y: auto;
 		
 			>div {
 				border: 1px solid #f1f1f1;
@@ -135,10 +134,17 @@
 			
 			.comp {
 				
-				>img {
+				.img {
 					width: 30px;
 					height: 20px;
 					margin-bottom: 10px;
+					overflow: hidden;
+					text-align: center;
+					
+					>img {
+						max-width: 100%;
+						max-height: 100%;
+					}
 				}
 				
 				>span {

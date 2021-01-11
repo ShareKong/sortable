@@ -16,7 +16,7 @@
 						<sortable v-model="sortable_arr" :options="sortable_options" class="sortable" @add="sortableEnd"></sortable>
 					</div>
 					<!-- 鼠标点击的箭头 -->
-					<img v-if="scroll_y" @dblclick="leftArrowDb" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
+					<img v-if="scroll_y" class="left-arrow" :style="{'top':scroll_y+'px'}" src="../../assets/icom-img/left-arrow.png" alt="">
 				</div>
 				<!-- 中间右侧操作栏 -->
 				<phone-right-menu @refreshPhone="refreshPhone" @deleteComp="deleteComp" @backData="backData" @advance="advance"></phone-right-menu>
@@ -232,7 +232,6 @@
 				let data_sorts = evt.clone.dataset.sorts;
 				let attr_obj = {};
 				// let attr_obj = JSON.parse(localStorage.getItem('attr_obj'));
-				// console.log(evt)
 				for(let k in CompList)
 				{
 					if(CompList[k].sorts == data_sorts) {
@@ -240,11 +239,8 @@
 						break;
 					}
 				}
-				// console.log(attr_obj)
 				// 让组件移动到 iframe 上之后隐藏
-				evt.item.style.width = 0;
-				evt.item.style.height = 0;
-				evt.item.style.overflow = 'hidden';
+				evt.item.style.display = 'none';
 				// 让组件移动到 iframe 上之后隐藏 end
 				this.isStMask = false;
 				// this.rightFresh = !this.rightFresh;
@@ -317,10 +313,6 @@
 			hideLeftArrow() {
 				this.scroll_y = 0;
 			},
-			// 双击标志的向左箭头隐藏
-			leftArrowDb() {
-				this.scroll_y = 0;
-			},
 			// 返回上一步
 			backData() {
 				// console.log('back data')
@@ -371,7 +363,7 @@
 		>div {
 			padding: 20px;
 			&:nth-child(3) {
-				width: 30%;
+				width: 45%;
 			}
 		}
 		
@@ -410,11 +402,8 @@
 						width: 100%;
 						height: 100%;
 		
-						* {
-							width: 0;
-							height: 0;
-							overflow: hidden;
-							color: red;
+						>* {
+							display: none;
 						}
 					}
 				}

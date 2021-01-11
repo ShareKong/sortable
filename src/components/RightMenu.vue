@@ -37,13 +37,13 @@
 					<el-form-item label="按钮文字" :key="index" v-if="index=='button_text'">
 						<el-input v-model="attr_obj.button_text" placeholder="请输入内容"></el-input>
 					</el-form-item>
-					<el-form-item label="按钮类型" :key="index" v-if="index=='button_type'">
-						<el-radio v-model="attr_obj.button_type" label="default">default</el-radio>
-						<el-radio v-model="attr_obj.button_type" label="primary">primary</el-radio>
-						<el-radio v-model="attr_obj.button_type" label="error">error</el-radio>
-						<el-radio v-model="attr_obj.button_type" label="warning">warning</el-radio>
-						<el-radio v-model="attr_obj.button_type" label="success">success</el-radio>
-						<el-radio v-model="attr_obj.button_type" label="info">info</el-radio>
+					<el-form-item label="主题类型" :key="index" v-if="index=='theme_type'">
+						<el-radio v-model="attr_obj.theme_type" label="default">default</el-radio>
+						<el-radio v-model="attr_obj.theme_type" label="primary">primary</el-radio>
+						<el-radio v-model="attr_obj.theme_type" label="error">error</el-radio>
+						<el-radio v-model="attr_obj.theme_type" label="warning">warning</el-radio>
+						<el-radio v-model="attr_obj.theme_type" label="success">success</el-radio>
+						<el-radio v-model="attr_obj.theme_type" label="info">info</el-radio>
 					</el-form-item>
 					<el-form-item label="按钮尺寸" :key="index" v-if="index=='button_size'">
 						<el-radio v-model="attr_obj.button_size" label="default">默认</el-radio>
@@ -58,21 +58,14 @@
 						<el-radio v-model="attr_obj.button_plain" label="false">否</el-radio>
 						<el-radio v-model="attr_obj.button_plain" label="true">是</el-radio>
 					</el-form-item>
-					<el-form-item label="默认值" :key="index" v-if="index=='value'">
-						<el-input v-model="attr_obj.value" placeholder="请输入内容"></el-input>
+					<el-form-item label="默认值" :key="index" v-if="index=='default_value'">
+						<el-input v-model="attr_obj.default_value" placeholder="请输入内容"></el-input>
 					</el-form-item>
 					<el-form-item label="排列方式" :key="index" v-if="index=='direction'">
 						<el-select v-model="attr_obj.direction" placeholder="请选择">
 							<el-option label="水平" value="horizontal"></el-option>
 							<el-option label="垂直" value="vertical"></el-option>
 						</el-select>
-					</el-form-item>
-					<el-form-item label="主题类型" :key="index" v-if="index=='notice_item'">
-						<el-radio v-model="attr_obj.notice_item" label="primary">primary</el-radio>
-						<el-radio v-model="attr_obj.notice_item" label="success">success</el-radio>
-						<el-radio v-model="attr_obj.notice_item" label="error">error</el-radio>
-						<el-radio v-model="attr_obj.notice_item" label="warning">warning</el-radio>
-						<el-radio v-model="attr_obj.notice_item" label="none">none</el-radio>
 					</el-form-item>
 					<el-form-item label="滚动模式" :key="index" v-if="index=='notice_scroll'">
 						<el-radio v-model="attr_obj.notice_scroll" label="horizontal">水平</el-radio>
@@ -103,8 +96,11 @@
 		},
 		data () {
 			return {
+				// 组件属性
 				attr_obj: {},
+				// 页面类型
 				type_list: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
+				// 页面信息
 				page_info: {},
 			}
 		},
@@ -116,8 +112,17 @@
 				this.initAttrObj();
 			},
 			// 监听组件属性值改变
-			is_comp_page() {
-				this.update();
+			is_comp_page(n, o) {
+				let old_data = JSON.stringify(o);
+				let new_data = JSON.stringify(n);
+				// 以下情况不会更新组件属性到 iframe 中：
+				// 第一次点击组件时
+				// 本次选中的组件和上次选中的组件 unique 不一样时
+				// 组件属性没有发生改变时
+				if(o.unique && n.unique == o.unique && old_data != new_data)  {
+					// 更新组件属性值
+					this.update();
+				}
 			},
 			page_item(n) {
 				this.page_info = n;
@@ -128,7 +133,7 @@
 			// 判断组件是否有可设属性
 			is_show () {
 				let arr_len = (Object.keys(this.attr_obj)).length;
-				if(arr_len < publicList.attr_len) {
+				if(arr_len <= publicList.attr_len) {
 					return false;
 				}
 				else {

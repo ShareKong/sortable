@@ -1,8 +1,9 @@
 <template>
 	<div class="page-list">
 		<div class="title">页面列表</div>
-		<ul>
+		<ul class="scrollbar">
 			<li v-for="(item,index) in page_list" :key="index" @click="changePage(index, item.path, item.type)" :class="{'li-active': index==page_list_index}">{{item.name}}</li>
+			
 		</ul>
 	</div>
 </template>
@@ -48,6 +49,9 @@
 	}
 
 	ul {
+		// 34px 是标题的高度
+		height: calc(100% - 34px);
+		overflow-y: auto;
 
 		li {
 			padding: 8px;

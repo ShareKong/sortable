@@ -1,17 +1,20 @@
 /**
- * child_id 默认值都设为 -1
- */
-
-/**
- * 当前初始化组件：
+ * 初始化组件：
 {
 	sorts: // 组件的专属 sorts，该在字段不能与其他组件值相同
 	name: // 组件名称
 	img_url: // 为组件的图片，后期换成图标，可以为空
-	// type 表示该组件可以在哪些类型的页面可以拖拽
+	// type 表示该组件可以在哪些类型的页面可以拖拽，其值是页面的类型
 	type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
 }
  */
+/**
+ * 若组件中有 child_id，则设置其默认值为 -1，否则会出错
+ * 若组件中有默认值，则命名为: default_value
+ * 若组件中有6种主题类型，则命名为: theme_type
+ * 若组件中有输入提示，则命名为: placeholder
+ */
+
 
 let list = [
 	// 输入框
@@ -21,7 +24,7 @@ let list = [
 		// 提示内容
 		placeholder: '',
 		// 默认值
-		value: '',
+		default_value: '',
 		img_url: require('@/assets/icon-component/st-input.png'),
 		type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
 	},
@@ -33,8 +36,8 @@ let list = [
 		type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
 		// 按钮文字
 		button_text: '',
-		// 按钮类型
-		button_type: 'default',
+		// 主题类型
+		theme_type: 'default',
 		// 按钮尺寸
 		button_size: 'default',
 		// 按钮的形状
@@ -108,8 +111,11 @@ let list = [
 		name: '公告',
 		img_url: require('@/assets/icon-component/st-applys.png'),
 		type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
-		notice_item: 'warning',
+		// 主题
+		theme_type: 'warning',
+		// 	滚动模式
 		notice_scroll: 'horizontal',
+		// 是否衔接
 		notice_join: 'true',
 	}
 ]

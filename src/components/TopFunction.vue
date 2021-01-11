@@ -2,10 +2,6 @@
 	<div class="top-function">
 		
 		<div class="left">
-			<div class="panel border-right" @click="save">
-				<img src="@/assets/top-function-icon-img/save.png" alt="">
-				<span>保存</span>
-			</div>
 			<div class="panel border-right" @click.stop="showPageList">
 				<img src="@/assets/top-function-icon-img/page.png" alt="">
 				<span>页面列表</span>
@@ -13,10 +9,12 @@
 				<!-- 页面列表 -->
 				<page-list v-if="is_show_page_list" class="page-list" :page_list="page_list" :page_list_index="page_list_index" @changePage="changePage"></page-list>
 			</div>
-			<div class="panel border-right" @click="setTheme">
+			<div class="panel border-right" @click.stop="showThemePanel">
 				<img src="@/assets/top-function-icon-img/theme.png" alt="">
 				<span>主题设置</span>
 				<img src="@/assets/top-function-icon-img/down.png" alt="">
+				<!-- 页面主题面板 -->
+				<theme-panel v-if="is_show_theme_panel" class="theme-panel"></theme-panel>
 			</div>
 		</div>
 		
@@ -25,6 +23,10 @@
 				<img src="@/assets/top-function-icon-img/set.png" alt="">
 				<span>页面设置</span>
 			</div>
+			<div class="panel border-left" @click="save">
+				<img src="@/assets/top-function-icon-img/save.png" alt="">
+				<span>保存</span>
+			</div>
 		</div>
 		
 	</div>
@@ -32,6 +34,7 @@
 
 <script>
 	import PageList from '@/components/PageList.vue'
+	import ThemePanel from '@/components/ThemePanel.vue'
 	
 	export default {
 		props: {
@@ -44,10 +47,12 @@
 		},
 		components: {
 			PageList,
+			ThemePanel,
 		},
 		data () {
 			return {
 				is_show_page_list: false,
+				is_show_theme_panel: false,
 			}
 		},
 		methods: {
@@ -64,8 +69,8 @@
 				this.$emit('changePage', index, url, type)
 			},
 			// 主题设置
-			setTheme() {
-				
+			showThemePanel() {
+				this.is_show_theme_panel = !this.is_show_theme_panel;
 			},
 			// 页面设置
 			setPage() {
@@ -99,9 +104,11 @@
 			&:hover {
 				color: #444;
 				// color: rgba(64, 158, 255, 1);
-			}
-			&_flex_end {
 				
+				i {
+					color: #444;
+					// color: rgba(64, 158, 255, 1);
+				}
 			}
 			
 			>img {
@@ -116,6 +123,12 @@
 			}
 			
 			.page-list {
+				position: absolute;
+				top: 55px;
+				left: 0;
+			}
+			
+			.theme-panel {
 				position: absolute;
 				top: 55px;
 				left: 0;
