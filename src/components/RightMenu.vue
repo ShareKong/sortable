@@ -29,7 +29,7 @@
 		<div class="attributes" v-else>
 			<div class="tip">{{attr_obj.name}}</div>
 			<div class="tip" v-if="!is_show">暂无可设属性</div>
-			<el-form v-else label-width="80px">
+			<el-form v-else label-width="80px" class="form scrollbar">
 				<template v-for="(item,index) in attr_obj">
 					<el-form-item label="提示内容" :key="index" v-if="index=='placeholder'">
 						<el-input v-model="attr_obj.placeholder" placeholder="请输入内容"></el-input>
@@ -75,6 +75,66 @@
 						<el-radio v-model="attr_obj.notice_join" label="false">否</el-radio>
 						<el-radio v-model="attr_obj.notice_join" label="true">是</el-radio>
 					</el-form-item>
+					<!-- 商品列表 -->
+					<el-form-item label="列表样式" :key="index" v-if="index=='list_type'">
+						<el-radio-group v-model="attr_obj.list_type" fill="#9bcdff" size="mini">
+							<el-radio-button label="list-type-1" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/list-type-1.png" alt="">
+							</el-radio-button>
+							<el-radio-button label="list-type-2" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/list-type-2.png" alt="">
+							</el-radio-button>
+							<el-radio-button label="list-type-3" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/list-type-3.png" alt="">
+							</el-radio-button>
+							<el-radio-button label="list-type-4" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/list-type-4.png" alt="">
+							</el-radio-button>
+							<el-radio-button label="list-type-5" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/list-type-5.png" alt="">
+							</el-radio-button>
+							<el-radio-button label="list-type-6" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/list-type-6.png" alt="">
+							</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="商品样式" :key="index" v-if="index=='shop_type'">
+						<el-radio-group v-model="attr_obj.shop_type" fill="#9bcdff" size="mini">
+							<el-radio label="shop-type-1" border class="mb-1">无边透明底</el-radio>
+							<el-radio label="shop-type-2" border class="mb-1">无边白底</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="角的样式" :key="index" v-if="index=='shop_shape'">
+						<el-radio-group v-model="attr_obj.shop_shape" fill="#9bcdff" size="mini">
+							<el-radio-button label="square" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/square.png" alt="">
+							</el-radio-button>
+							<el-radio-button label="circle" border>
+								<img class="icon-shop-list" src="../assets/icon-right-menu/circle.png" alt="">
+							</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item label="商品名称" :key="index" v-if="index=='is_show_title'">
+						<el-switch v-model="attr_obj.is_show_title"></el-switch>
+						<small class="tip">是否显示商品名称</small>
+					</el-form-item>
+					<el-form-item label="商品描述" :key="index" v-if="index=='is_show_description'">
+						<el-switch v-model="attr_obj.is_show_description"></el-switch>
+						<small class="tip">是否显示商品描述</small>
+					</el-form-item>
+					<el-form-item label="商品价格" :key="index" v-if="index=='is_show_price'">
+						<el-switch v-model="attr_obj.is_show_price"></el-switch>
+						<small class="tip">是否显示商品价格</small>
+					</el-form-item>
+					<el-form-item label="按钮颜色" :key="index" v-if="index=='button_type'">
+						<el-radio v-model="attr_obj.button_type" label="default">default</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="primary">primary</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="error">error</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="warning">warning</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="success">success</el-radio>
+						<el-radio v-model="attr_obj.button_type" label="info">info</el-radio>
+					</el-form-item>
+					<!-- 商品列表 end -->
 					
 				</template>
 				<!-- <el-button type="danger" @click="update" v-if="is_show">设置属性值</el-button> -->
@@ -223,7 +283,7 @@
 	}
 	
 	.attributes {
-		// border: 1px solid #eee;
+		// border: 1px solid #9bcdff;
 		padding: 20px 10px;
 		// border-radius: 10px;
 		
@@ -233,6 +293,17 @@
 			font-size: 0.8em;
 			margin-bottom: 10px;
 		}
+		
+		.form {
+			padding-top: 10px;
+			max-height: calc(100vh - 200px);
+			overflow-y: auto;
+		}
+		
+		.icon-shop-list {
+			width: 20px;
+			max-height: 100%;
+		}
 	}
 }
 
@@ -241,5 +312,12 @@
 }
 .mr-2 {
 	margin-right: 20px;
+}
+.mb-1 {
+	margin-bottom: 10px;
+}
+small.tip {
+	margin: 0 5px;
+	color: #aaa;
 }
 </style>
