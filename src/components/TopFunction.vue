@@ -14,7 +14,7 @@
 				<span>主题设置</span>
 				<img src="@/assets/top-function-icon-img/down.png" alt="">
 				<!-- 页面主题面板 -->
-				<theme-panel v-if="is_show_theme_panel" class="theme-panel"></theme-panel>
+				<theme-panel @updatePageTheme="updatePageTheme" v-if="is_show_theme_panel" class="theme-panel"></theme-panel>
 			</div>
 		</div>
 		
@@ -75,6 +75,10 @@
 			// 页面设置
 			setPage() {
 				this.$emit('setPage');
+			},
+			// 更新页面主题
+			updatePageTheme() {
+				this.$emit('updatePageTheme');
 			},
 			
 		}

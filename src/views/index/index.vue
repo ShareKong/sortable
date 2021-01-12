@@ -1,7 +1,7 @@
 <template>
 	<div id="index" @mousedown="showStMask" @mouseup="hideStMask">
 		<!-- 顶部功能栏 -->
-		<top-function :page_list="page_list" :page_list_index="page_list_index" @changePage="changePage" @save="save" @setPage="setPage"></top-function>
+		<top-function :page_list="page_list" :page_list_index="page_list_index" @changePage="changePage" @save="save" @setPage="setPage" @updatePageTheme="updatePageTheme"></top-function>
 		<!-- 主体区 -->
 		<div class="main">
 			<!-- 组件栏 -->
@@ -338,6 +338,12 @@
 			setPageSuccess() {
 				this.$refs.iframe.contentWindow.postMessage({
 					method: 'setPageSuccess'
+				}, '*');
+			},
+			// 更新页面主题
+			updatePageTheme() {
+				this.$refs.iframe.contentWindow.postMessage({
+					method: 'updatePageTheme'
 				}, '*');
 			},
 			

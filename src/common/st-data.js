@@ -126,8 +126,6 @@ let list = [
 		type: ['index', 'cover', 'article', 'article_list', 'pic_list', 'us'],
 		// 列表样式
 		list_type: 'list-type-1',
-		// 商品样式
-		shop_type: 'shop-type-1',
 		// 商品角的形状
 		shop_shape: 'square',
 		// 是否显示商品名称
@@ -136,6 +134,8 @@ let list = [
 		is_show_description: true,
 		// 是否显示商品价格
 		is_show_price: true,
+		// 是否显示按钮
+		is_show_button: true,
 		// 按钮文字
 		button_text: '抢购',
 		// 按钮颜色

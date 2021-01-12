@@ -12,7 +12,7 @@
 			<!-- 主题列表 -->
 			<div class="theme-list scrollbar">
 				<template>
-					<div class="theme-item" v-for="(item,index) in 20" :key="index" :class="{'theme-item-active':theme_index==index}" @click="choosetheme(index)">{{item}}</div>
+					<div class="theme-item" v-for="(item,index) in theme_list" :key="index" :class="{'theme-item-active':theme_index==index}" @click="choosetheme(index, item.value)">{{item.name}}</div>
 				</template>
 			</div>
 		</div>
@@ -33,11 +33,22 @@
 					'其他',
 					'自定义',
 				],
+				// 模拟数据
+				theme_list: [
+					{name: '红色', value: '#f00'},
+					{name: '蓝色', value: '#00f'},
+					{name: '绿色', value: '#0f0'},
+				],
 				// 当前选中的类型
 				category_index: 0,
 				// 当前选中的主题
-				theme_index: 0,
+				theme_index: -1,
+				// 页面主题内容
+				page_theme: {},
 			}
+		},
+		mounted() {
+			this.getTheme();
 		},
 		methods: {
 			stop() {
@@ -47,9 +58,35 @@
 			changeCategory(index) {
 				this.category_index = index;
 			},
+			// 获取页面主题
+			getTheme() {
+				const _this = this;
+				this.http.getPageTheme().then(res => {
+					_this.page_theme = res[0];
+					_this.theme_index = _this.theme_list.findIndex((item) => {
+						return item.value == res[0].page_theme
+					})
+				})
+			},
 			// 选中主题
-			choosetheme(index) {
+			choosetheme(index, color) {
+				const _this = this;
 				this.theme_index = index;
+				this.http.setPageTheme({id: this.page_theme.id, 'page_theme': color}).then(res => {
+					if(res == 1) {
+						this.$message({
+							message: '页面主题设置成功',
+							type: 'success'
+						})
+						_this.$emit('updatePageTheme');
+					}
+					else {
+						this.$message({
+							message: '页面主题设置失败',
+							type: 'error'
+						})
+					}
+				})
 			}
 		}
 	}

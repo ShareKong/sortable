@@ -98,12 +98,6 @@
 							</el-radio-button>
 						</el-radio-group>
 					</el-form-item>
-					<el-form-item label="商品样式" :key="index" v-if="index=='shop_type'">
-						<el-radio-group v-model="attr_obj.shop_type" fill="#9bcdff" size="mini">
-							<el-radio label="shop-type-1" border class="mb-1">无边透明底</el-radio>
-							<el-radio label="shop-type-2" border class="mb-1">无边白底</el-radio>
-						</el-radio-group>
-					</el-form-item>
 					<el-form-item label="角的样式" :key="index" v-if="index=='shop_shape'">
 						<el-radio-group v-model="attr_obj.shop_shape" fill="#9bcdff" size="mini">
 							<el-radio-button label="square" border>
@@ -125,6 +119,10 @@
 					<el-form-item label="商品价格" :key="index" v-if="index=='is_show_price'">
 						<el-switch v-model="attr_obj.is_show_price"></el-switch>
 						<small class="tip">是否显示商品价格</small>
+					</el-form-item>
+					<el-form-item label="按钮" :key="index" v-if="index=='is_show_button'">
+						<el-switch v-model="attr_obj.is_show_button"></el-switch>
+						<small class="tip">是否显示按钮</small>
 					</el-form-item>
 					<el-form-item label="按钮颜色" :key="index" v-if="index=='button_type'">
 						<el-radio v-model="attr_obj.button_type" label="default">default</el-radio>
